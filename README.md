@@ -1,2 +1,2 @@
 # sloth
-A logging tool kit
+Simple, configurable and scalable Structured Tool for Go. 
