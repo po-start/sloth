@@ -1,0 +1,24 @@
+version: '3.2'
+services:
+    mysql-master:
+        image: "mysql:5.7"
+        ports:
+            - "3366:3306"
+        volumes:
+            - "/Users/allen/Docker/db/mysql-master-slave/mysql-master:/var/lib/mysql"
+            - "/Users/allen/Docker/config/mysql-master-slave/mysql-master:/etc/mysql/mysql.conf.d"
+            - "/Users/allen/Docker/logs/mysql-master-slave/mysql-master:/var/log/mysql"
+        environment:
+            - "MYSQL_ROOT_PASSWORD=hello123"
+    mysql-slave:
+        image: "mysql:5.7"
+        ports:
+            - "3376:3306"
+        volumes:
+            - "/Users/allen/Docker/db/mysql-master-slave/mysql-slave:/var/lib/mysql"
+            - "/Users/allen/Docker/config/mysql-master-slave/mysql-slave:/etc/mysql/mysql.conf.d"
+            - "/Users/allen/Docker/logs/mysql-master-slave/mysql-slave:/var/log/mysql"
+        links:
+            - "mysql-master:mysql-master"
+        environment:
+            - "MYSQL_ROOT_PASSWORD=hello123"

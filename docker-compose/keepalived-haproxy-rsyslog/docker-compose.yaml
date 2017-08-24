@@ -1,0 +1,86 @@
+version: '3.2'
+services:
+    debian-server:
+        image: "debian:0.1.1"
+        volumes:
+            - "${HOME}/Docker/script/keepalived-haproxy-rsyslog/debian/entrypoint.sh:/usr/bin/entrypoint.sh"
+        ports:
+            - "3100:3100"
+            - "3101:3101"
+            - "3200:3200"
+            - "8888:8888"
+        privileged: true
+        tty: true
+        networks:
+            haproxy-network:
+                ipv4_address: "172.32.6.12"
+        container_name: "debian-server"
+        command: "/bin/bash -c /usr/bin/entrypoint.sh"
+    keepalived-master:
+        image: "keepalived-haproxy-rsyslog:0.1.1"
+        volumes:
+            - "${HOME}/Docker/config/keepalived-haproxy-rsyslog/haproxy-master:/usr/local/etc/haproxy"
+            - "${HOME}/Docker/db/keepalived-haproxy-rsyslog/haproxy-master:/usr/local/haproxy"
+            - "${HOME}/Docker/logs/keepalived-haproxy-rsyslog/haproxy-master:/var/log/haproxy"
+#            - "${HOME}/Docker/config/keepalived-haproxy-rsyslog/keepalived-master:/etc/keepalived"
+            - "${HOME}/Docker/script/keepalived-haproxy-rsyslog/detect:/detect"
+            - "${HOME}/Docker/logs/keepalived-haproxy-rsyslog/keepalived-master/messages:/var/log/messages"
+            - "${HOME}/Docker/script/keepalived-haproxy-rsyslog/keepalived/entrypoint.sh:/usr/bin/entrypoint.sh"
+        restart: "always"
+        privileged: true
+        command: "/bin/bash -c /usr/bin/entrypoint.sh"
+        environment:
+            - "ROUTER_ID=KeepalivedServer01"
+            - "VIRTUAL_ROUTER_ID=121"
+            - "PRIORITY=120"
+            - "INTERFACE=eth0"
+            - "MCAST_SRC_IP=172.32.6.121"
+            - "VIRTUAL_IP=172.32.6.120"
+            - "AUTH_TYPE=PASS"
+            - "AUTH_PASS=hello123"
+            - "STATE=MASTER"
+            - "SCRIPT=\"/bin/bash -c /detect/haproxy.sh\""
+            - "NOPREEMPT=0"
+            - "NOTIFY_MASTER=\"/detect/notify.sh master\""
+            - "NOTIFY_BACKUP=\"/detect/notify.sh backup\""
+            - "NOTIFY_FAULT=\"/detect/notify.sh fault\""
+        networks:
+            haproxy-network:
+                ipv4_address: "172.32.6.121"
+        container_name: "keepalived-master"
+    keepalived-backup:
+        image: "keepalived-haproxy-rsyslog:0.1.1"
+        volumes:
+            - "${HOME}/Docker/config/keepalived-haproxy-rsyslog/haproxy-backup:/usr/local/etc/haproxy"
+            - "${HOME}/Docker/db/keepalived-haproxy-rsyslog/haproxy-backup:/usr/local/haproxy"
+            - "${HOME}/Docker/logs/keepalived-haproxy-rsyslog/haproxy-backup:/var/log/haproxy"
+#            - "${HOME}/Docker/config/keepalived-haproxy-rsyslog/keepalived-backup:/etc/keepalived"
+            - "${HOME}/Docker/script/keepalived-haproxy-rsyslog/detect:/detect"
+            - "${HOME}/Docker/logs/keepalived-haproxy-rsyslog/keepalived-backup/messages:/var/log/messages"
+            - "${HOME}/Docker/script/keepalived-haproxy-rsyslog/keepalived/entrypoint.sh:/usr/bin/entrypoint.sh"
+        restart: "always"
+        privileged: true
+        command: "/bin/bash -c /usr/bin/entrypoint.sh"
+        environment:
+            - "ROUTER_ID=KeepalivedServer02"
+            - "VIRTUAL_ROUTER_ID=122"
+            - "PRIORITY=100"
+            - "INTERFACE=eth0"
+            - "MCAST_SRC_IP=172.32.6.122"
+            - "VIRTUAL_IP=172.32.6.120"
+            - "AUTH_TYPE=PASS"
+            - "AUTH_PASS=hello123"
+            - "STATE=BACKUP"
+            - "SCRIPT=\"/bin/bash -c /detect/haproxy.sh\""
+            - "NOPREEMPT=1"
+            - "NOTIFY_MASTER=\"/detect/notify.sh master\""
+            - "NOTIFY_BACKUP=\"/detect/notify.sh backup\""
+            - "NOTIFY_FAULT=\"/detect/notify.sh fault\""
+        networks:
+            haproxy-network:
+                ipv4_address: "172.32.6.122"
+        container_name: "keepalived-backup"
+networks:
+    haproxy-network:
+        external:
+            name: "mysqlserver_mysql-haproxy-network"

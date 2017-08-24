@@ -1,0 +1,26 @@
+version: '3.2'
+services:
+    haproxy-server:
+        image: "haproxy:1.7.8-rsyslog"
+        ports:
+            - "3100:3100"
+            - "3101:3101"
+            - "3200:3200"
+            - "8888:8888"
+        volumes:
+            - "/Users/allen/Docker/config/haproxy/conf-master:/usr/local/etc/haproxy"
+            - "/Users/allen/Docker/db/haproxy/haproxy-master:/usr/local/haproxy"
+            - "/Users/allen/Docker/logs/haproxy/haproxy-master:/var/log/haproxy"
+            - "/Users/allen/Docker/script/haproxy-rsyslog:/script"
+        restart: "always"
+        # command: "haproxy -f /usr/local/etc/haproxy/haproxy.cfg"
+        ## Docker本身只能启动一个服务, 所以启动多服务,需要在启动后以脚本的方式启动多服务或使用Supervisor
+        command: "/bin/bash -c /script/entrypoint.sh"
+        networks:
+            haproxy-network:
+                ipv4_address: "172.32.6.2"
+        container_name: "haproxy-server"
+networks:
+    haproxy-network:
+        external:
+            name: "mysqlserver_mysql-haproxy-network"

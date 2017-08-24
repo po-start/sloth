@@ -1,0 +1,45 @@
+version: '3.2'
+services:
+    redis-cluster-master:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-cluster/redis-master:/data"
+            - "/Users/allen/Docker/config/redis-cluster/redis-master:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis:/var/log/redis/"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+    redis-cluster-slave:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-cluster/redis-slave:/data"
+            - "/Users/allen/Docker/config/redis-cluster/redis-slave:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis:/var/log/redis/"
+        links:
+            - "redis-cluster-master:redis-cluster-master"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+    redis-cluster-sentinel-1:
+        image: "redis-sentinel:0.1.1"
+        ports:
+            - "26379:26379"
+        volumes:
+            - "/Users/allen/Docker/config/redis-cluster/redis-sentinel-1:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis:/var/log/redis/"
+        links:
+            - "redis-cluster-master:redis-cluster-master"
+    redis-cluster-sentinel-2:
+        image: "redis-sentinel:0.1.1"
+        ports:
+            - "26389:26379"
+        volumes:
+            - "/Users/allen/Docker/config/redis-cluster/redis-sentinel-2:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis:/var/log/redis/"
+        links:
+            - "redis-cluster-master:redis-cluster-master"
+    redis-cluster-sentinel-3:
+        image: "redis-sentinel:0.1.1"
+        ports:
+            - "26399:26379"
+        volumes:
+            - "/Users/allen/Docker/config/redis-cluster/redis-sentinel-3:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis:/var/log/redis/"
+        links:
+            - "redis-cluster-master:redis-cluster-master"
