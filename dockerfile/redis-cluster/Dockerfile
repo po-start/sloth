@@ -8,7 +8,7 @@ RUN cd ~ && wget -O redis.tar.gz "$REDIS_DOWNLOAD_URL"
 RUN	mkdir -p /usr/src/redis
 RUN	cd ~ && tar -xzf redis.tar.gz -C /usr/src/redis
 RUN	cd ~ && rm redis.tar.gz
-RUN cp /usr/src/redis/src/redis-trib.rb /usr/local/bin
+RUN cp /usr/src/redis/redis-3.2.8/src/redis-trib.rb /usr/local/bin
 RUN rm -r /usr/src/redis
 
 EXPOSE 6379

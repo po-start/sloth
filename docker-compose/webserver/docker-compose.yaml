@@ -1,47 +1,47 @@
 version: '3.2'
 services:
-    redisserver:
-        image: "redis:3.2.8"
-        ports:
-            - "6379:6379"
-        volumes:
-#            - type: volume
-#              source: /Users/allen/Docker/db/redis
-#              target: /data
-            - "/Users/allen/Docker/db/redis:/data"
-            - "/Users/allen/Docker/config/redis:/usr/local/etc/redis"
-            - "/Users/allen/Docker/logs/redis:/var/log/redis/"
-        command: "redis-server /usr/local/etc/redis/redis.conf"
-        labels:
-            name: "redis"
-            role: "redis server"
-        # nginx意外退出时自动重启
-        restart: "always"
-        # 容器名称
-        container_name: "redis-server"
+#    redisserver:
+#        image: "redis:3.2.8"
+#        ports:
+#            - "6379:6379"
+#        volumes:
+##            - type: volume
+##              source: /Users/allen/Docker/db/redis
+##              target: /data
+#            - "/Users/allen/Docker/db/redis:/data"
+#            - "/Users/allen/Docker/config/redis:/usr/local/etc/redis"
+#            - "/Users/allen/Docker/logs/redis:/var/log/redis/"
+#        command: "redis-server /usr/local/etc/redis/redis.conf"
+#        labels:
+#            name: "redis"
+#            role: "redis server"
+#        # nginx意外退出时自动重启
+#        restart: "always"
+#        # 容器名称
+#        container_name: "redis-server"
 
-    memcachedserver:
-        image: "memcached:1.4.35"
-        ports:
-            - "11211:11211"
-        labels:
-            name: "memcached"
-            role: "memcached server"
-        # memcached意外退出时自动重启
-        restart: "always"
-        # 容器名称
-        container_name: "memcached-server"
-
-    mongodbserver:
-        image: "mongo:3.4.2"
-        ports:
-            - "27017:27017"
-        volumes:
-            - "/Users/allen/Docker/db/mongodb:/data/db"
-        # mongo 意外退出时自动重启
-        restart: "always"
-        # 容器名称
-        container_name: "mongodb-server"
+#    memcachedserver:
+#        image: "memcached:1.4.35"
+#        ports:
+#            - "11211:11211"
+#        labels:
+#            name: "memcached"
+#            role: "memcached server"
+#        # memcached意外退出时自动重启
+#        restart: "always"
+#        # 容器名称
+#        container_name: "memcached-server"
+#
+#    mongodbserver:
+#        image: "mongo:3.4.2"
+#        ports:
+#            - "27017:27017"
+#        volumes:
+#            - "/Users/allen/Docker/db/mongodb:/data/db"
+#        # mongo 意外退出时自动重启
+#        restart: "always"
+#        # 容器名称
+#        container_name: "mongodb-server"
 
     mysqlserver:
         image: "mysql:5.7"
