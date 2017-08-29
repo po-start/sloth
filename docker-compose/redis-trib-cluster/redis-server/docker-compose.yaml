@@ -1,0 +1,75 @@
+version: '3.2'
+services:
+    redis-server-1:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-trib-cluster/redis-server-1:/data"
+            - "/Users/allen/Docker/config/redis-trib-cluster/redis-conf:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-trib-cluster/redis-server-1:/var/log/redis/"
+        networks:
+            redis-trib-cluster-network:
+                ipv4_address: "172.88.11.101"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-trib-cluster-server-1"
+    redis-server-2:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-trib-cluster/redis-server-2:/data"
+            - "/Users/allen/Docker/config/redis-trib-cluster/redis-conf:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-trib-cluster/redis-server-2:/var/log/redis/"
+        networks:
+            redis-trib-cluster-network:
+                ipv4_address: "172.88.11.102"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-trib-cluster-server-2"
+    redis-server-3:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-trib-cluster/redis-server-3:/data"
+            - "/Users/allen/Docker/config/redis-trib-cluster/redis-conf:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-trib-cluster/redis-server-3:/var/log/redis/"
+        networks:
+            redis-trib-cluster-network:
+                ipv4_address: "172.88.11.103"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-trib-cluster-server-3"
+    redis-server-4:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-trib-cluster/redis-server-4:/data"
+            - "/Users/allen/Docker/config/redis-trib-cluster/redis-conf:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-trib-cluster/redis-server-4:/var/log/redis/"
+        networks:
+            redis-trib-cluster-network:
+                ipv4_address: "172.88.11.104"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-trib-cluster-server-4"
+    redis-server-5:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-trib-cluster/redis-server-5:/data"
+            - "/Users/allen/Docker/config/redis-trib-cluster/redis-conf:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-trib-cluster/redis-server-5:/var/log/redis/"
+        networks:
+            redis-trib-cluster-network:
+                ipv4_address: "172.88.11.105"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-trib-cluster-server-5"
+    redis-server-6:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-trib-cluster/redis-server-6:/data"
+            - "/Users/allen/Docker/config/redis-trib-cluster/redis-conf:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-trib-cluster/redis-server-6:/var/log/redis/"
+        networks:
+            redis-trib-cluster-network:
+                ipv4_address: "172.88.11.106"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-trib-cluster-server-6"
+networks:
+    redis-trib-cluster-network:
+        driver: "bridge"
+        ipam:
+            driver: "default"
+            config:
+                - subnet: "172.88.11.0/24"

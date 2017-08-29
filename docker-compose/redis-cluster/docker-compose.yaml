@@ -1,0 +1,134 @@
+version: '3.2'
+services:
+    redis-master-1:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-twemproxy-cluster/redis-master-1:/data"
+            - "/Users/allen/Docker/config/redis-twemproxy-cluster/redis-master-1:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-twemproxy-cluster/redis-master-1:/var/log/redis/"
+        networks:
+            redis-cluster-network:
+                ipv4_address: "172.88.12.101"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-cluster-master-1"
+    redis-master-2:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-twemproxy-cluster/redis-master-2:/data"
+            - "/Users/allen/Docker/config/redis-twemproxy-cluster/redis-master-2:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-twemproxy-cluster/redis-master-2:/var/log/redis/"
+        networks:
+            redis-cluster-network:
+                ipv4_address: "172.88.12.102"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-cluster-master-2"
+    redis-master-3:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-twemproxy-cluster/redis-master-3:/data"
+            - "/Users/allen/Docker/config/redis-twemproxy-cluster/redis-master-3:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-twemproxy-cluster/redis-master-3:/var/log/redis/"
+        networks:
+            redis-cluster-network:
+                ipv4_address: "172.88.12.103"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-cluster-master-3"
+    redis-trib-1:
+        image: "redis:3.2.8-trib"
+        volumes:
+            - "/Users/allen/Docker/dockerfile/redis-trib/entrypoint.sh:/entrypoint.sh"
+        environment:
+#            - "NODE_SUM=2"
+            - "NODE_SUM=0"
+#            - "REDIS_NODE=172.88.12.101:6379 172.88.12.201:6379 172.88.12.202:6379 172.88.12.102:6379 172.88.12.203:6379 172.88.12.204:6379"
+            - "REDIS_NODE=172.88.12.101:6379 172.88.12.102:6379 172.88.12.103:6379"
+        networks:
+            redis-cluster-network:
+                ipv4_address: "172.88.12.88"
+        command: "/bin/bash -c /entrypoint.sh"
+        container_name: "redis-cluster-trib-1"
+    redis-slave-1:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-twemproxy-cluster/redis-slave-1:/data"
+            - "/Users/allen/Docker/config/redis-twemproxy-cluster/redis-slave-1:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-twemproxy-cluster/redis-slave-1:/var/log/redis/"
+        links:
+            - "redis-master-1:redis-master"
+        networks:
+            redis-cluster-network:
+                ipv4_address: "172.88.12.201"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-cluster-slave-1"
+    redis-slave-2:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-twemproxy-cluster/redis-slave-2:/data"
+            - "/Users/allen/Docker/config/redis-twemproxy-cluster/redis-slave-2:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-twemproxy-cluster/redis-slave-2:/var/log/redis/"
+        links:
+            - "redis-master-1:redis-master"
+        networks:
+            redis-cluster-network:
+                ipv4_address: "172.88.12.202"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-cluster-slave-2"
+    redis-slave-3:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-twemproxy-cluster/redis-slave-3:/data"
+            - "/Users/allen/Docker/config/redis-twemproxy-cluster/redis-slave-3:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-twemproxy-cluster/redis-slave-3:/var/log/redis/"
+        links:
+            - "redis-master-2:redis-master"
+        networks:
+            redis-cluster-network:
+                ipv4_address: "172.88.12.203"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-cluster-slave-3"
+    redis-slave-4:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-twemproxy-cluster/redis-slave-4:/data"
+            - "/Users/allen/Docker/config/redis-twemproxy-cluster/redis-slave-4:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-twemproxy-cluster/redis-slave-4:/var/log/redis/"
+        links:
+            - "redis-master-2:redis-master"
+        networks:
+            redis-cluster-network:
+                ipv4_address: "172.88.12.204"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-cluster-slave-4"
+    redis-slave-5:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-twemproxy-cluster/redis-slave-5:/data"
+            - "/Users/allen/Docker/config/redis-twemproxy-cluster/redis-slave-5:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-twemproxy-cluster/redis-slave-5:/var/log/redis/"
+        links:
+            - "redis-master-3:redis-master"
+        networks:
+            redis-cluster-network:
+                ipv4_address: "172.88.12.205"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-cluster-slave-5"
+    redis-slave-6:
+        image: "redis:3.2.8"
+        volumes:
+            - "/Users/allen/Docker/db/redis-twemproxy-cluster/redis-slave-6:/data"
+            - "/Users/allen/Docker/config/redis-twemproxy-cluster/redis-slave-6:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-twemproxy-cluster/redis-slave-6:/var/log/redis/"
+        links:
+            - "redis-master-3:redis-master"
+        networks:
+            redis-cluster-network:
+                ipv4_address: "172.88.12.206"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-cluster-slave-6"
+networks:
+    redis-cluster-network:
+        driver: "bridge"
+        ipam:
+            driver: "default"
+            config:
+                - subnet: "172.88.12.0/24"

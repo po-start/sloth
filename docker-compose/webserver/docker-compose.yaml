@@ -61,14 +61,14 @@ services:
     phpwebserver:
         # 依赖mysql服务，意味着在启动php之前先启动mysql
         depends_on:
-            - "redisserver"
+#            - "redisserver"
             - "mysqlserver"
         image: "thinkphp:0.2.1"
         links:
             - "mysqlserver:mysqlserver"
-            - "mongodbserver:mongodbserver"
-            - "redisserver:redisserver"
-            - "memcachedserver:memcachedserver"
+#            - "mongodbserver:mongodbserver"
+#            - "redisserver:redisserver"
+#            - "memcachedserver:memcachedserver"
         volumes:
             - "/Users/allen/webstore:/data/webstore"
         ports:
