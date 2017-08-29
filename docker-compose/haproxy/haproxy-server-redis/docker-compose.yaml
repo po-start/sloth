@@ -1,16 +1,15 @@
 version: '3.2'
 services:
-    haproxy-server:
+    haproxy-redis-server:
         image: "haproxy:1.7.8-rsyslog"
         ports:
-            - "3100:3100"
-            - "3101:3101"
-            - "3200:3200"
-            - "8888:8888"
+            - "7100:7100"
+            - "7200:7200"
+            - "8899:8899"
         volumes:
-            - "/Users/allen/Docker/config/haproxy/conf-master:/usr/local/etc/haproxy"
-            - "/Users/allen/Docker/db/haproxy/haproxy-master:/usr/local/haproxy"
-            - "/Users/allen/Docker/logs/haproxy/haproxy-master:/var/log/haproxy"
+            - "/Users/allen/Docker/config/haproxy/conf-master/redis:/usr/local/etc/haproxy"
+            - "/Users/allen/Docker/db/haproxy/haproxy-master/redis:/usr/local/haproxy"
+            - "/Users/allen/Docker/logs/haproxy/haproxy-master/redis:/var/log/haproxy"
             - "/Users/allen/Docker/script/haproxy-rsyslog:/script"
         restart: "always"
         # command: "haproxy -f /usr/local/etc/haproxy/haproxy.cfg"
@@ -18,9 +17,9 @@ services:
         command: "/bin/bash -c /script/entrypoint.sh"
         networks:
             haproxy-network:
-                ipv4_address: "172.32.6.2"
-        container_name: "haproxy-server"
+                ipv4_address: "172.10.6.2"
+        container_name: "haproxy-redis-server"
 networks:
     haproxy-network:
         external:
-            name: "mysqlserver_mysql-haproxy-network"
+            name: "redisserver_redis-haproxy-network"
