@@ -1,0 +1,58 @@
+# Copyright (c) 2014, 2016, Oracle and/or its affiliates. All rights reserved.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; version 2 of the License.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+#
+# The MySQL  Server configuration file.
+#
+# For explanations see
+# http://dev.mysql.com/doc/mysql/en/server-system-variables.html
+
+[mysqld]
+pid-file						= /var/run/mysqld/mysqld.pid
+socket							= /var/run/mysqld/mysqld.sock
+datadir							= /var/lib/mysql
+#log-error	= /var/log/mysql/error.log
+# By default we only accept connections from localhost
+#bind-address	= 127.0.0.1
+# Disabling symbolic-links is recommended to prevent assorted security risks
+symbolic-links					= 0
+## Log config
+log_error						= /var/log/mysql/error.log 
+long_query_time					= 1
+slow_query_log					= ON
+slow_query_log_file				= /var/log/mysql/mysql-slow.log
+general_log						= ON
+general_log_file				= /var/log/mysql/mysql.log
+log-bin							= mysql-bin
+server-id						= 102
+relay_log						= relay_bin
+# 只读模式
+read_only						= 1
+log_slave_updates				= 1
+binlog_cache_size				= 1M
+binlog_format					= mixed
+# 无需开启二进制日志文件的数据库
+binlog-ignore-db				= mysql
+binlog-ignore-db				= sys
+binlog-ignore-db				= information_schema
+binlog-ignore-db				= performance_schema
+# 跳过指定error no类型的错误
+#slave-skip-errors				= 1062,1053,1146
+# 跳过所有错误
+#slave-skip-errors				= all
+## 启动数据半同步
+rpl_semi_sync_slave_enabled		= 1
+#plugin-load                    = "rpl_semi_sync_master=semisync_master.so;rpl_semi_sync_slave=semisync_slave.so"
+plugin-load						= "rpl_semi_sync_slave=semisync_slave.so"
