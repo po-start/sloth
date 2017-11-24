@@ -1,7 +1,9 @@
 version: '3.2'
 services:
     redis-server-1:
-        image: "redis:3.2.8"
+        image: "redis:4.0.2"
+        ports:
+            - "8001:6379"
         volumes:
             - "/Users/allen/Docker/db/redis-trib-cluster/redis-server-1:/data"
             - "/Users/allen/Docker/config/redis-trib-cluster/redis-conf:/usr/local/etc/redis"
@@ -12,7 +14,9 @@ services:
         command: "redis-server /usr/local/etc/redis/redis.conf"
         container_name: "redis-trib-cluster-server-1"
     redis-server-2:
-        image: "redis:3.2.8"
+        image: "redis:4.0.2"
+        ports:
+            - "8002:6379"
         volumes:
             - "/Users/allen/Docker/db/redis-trib-cluster/redis-server-2:/data"
             - "/Users/allen/Docker/config/redis-trib-cluster/redis-conf:/usr/local/etc/redis"
@@ -23,7 +27,9 @@ services:
         command: "redis-server /usr/local/etc/redis/redis.conf"
         container_name: "redis-trib-cluster-server-2"
     redis-server-3:
-        image: "redis:3.2.8"
+        image: "redis:4.0.2"
+        ports:
+            - "8003:6379"
         volumes:
             - "/Users/allen/Docker/db/redis-trib-cluster/redis-server-3:/data"
             - "/Users/allen/Docker/config/redis-trib-cluster/redis-conf:/usr/local/etc/redis"
@@ -34,7 +40,9 @@ services:
         command: "redis-server /usr/local/etc/redis/redis.conf"
         container_name: "redis-trib-cluster-server-3"
     redis-server-4:
-        image: "redis:3.2.8"
+        image: "redis:4.0.2"
+        ports:
+            - "8004:6379"
         volumes:
             - "/Users/allen/Docker/db/redis-trib-cluster/redis-server-4:/data"
             - "/Users/allen/Docker/config/redis-trib-cluster/redis-conf:/usr/local/etc/redis"
@@ -45,7 +53,9 @@ services:
         command: "redis-server /usr/local/etc/redis/redis.conf"
         container_name: "redis-trib-cluster-server-4"
     redis-server-5:
-        image: "redis:3.2.8"
+        image: "redis:4.0.2"
+        ports:
+            - "8005:6379"
         volumes:
             - "/Users/allen/Docker/db/redis-trib-cluster/redis-server-5:/data"
             - "/Users/allen/Docker/config/redis-trib-cluster/redis-conf:/usr/local/etc/redis"
@@ -56,7 +66,9 @@ services:
         command: "redis-server /usr/local/etc/redis/redis.conf"
         container_name: "redis-trib-cluster-server-5"
     redis-server-6:
-        image: "redis:3.2.8"
+        image: "redis:4.0.2"
+        ports:
+            - "8006:6379"
         volumes:
             - "/Users/allen/Docker/db/redis-trib-cluster/redis-server-6:/data"
             - "/Users/allen/Docker/config/redis-trib-cluster/redis-conf:/usr/local/etc/redis"

@@ -9,5 +9,5 @@ docker pull mysql:5.7
 docker pull mongo:3.4.2
 docker pull memcached:1.4.35
 docker pull ubuntu:16.04
-docker pull elasticsearch:5.2.1
+docker pull elasticsearch:5.6.3
 docker images

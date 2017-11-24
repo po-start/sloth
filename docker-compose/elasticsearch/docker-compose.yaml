@@ -1,0 +1,15 @@
+version: '3.2' 
+services:
+    elasticsearch:
+        image: "elasticsearch:5.6.3-plugins"
+        ports:
+            - "9200:9200"
+            - "9300:9300"
+        volumes:
+            - "${HOME}/Docker/config/elasticsearch/config:/usr/share/elasticsearch/config"
+            - "${HOME}/Docker/db/elasticsearch:/usr/share/elasticsearch/data"
+#        environment:
+#            - ""
+        restart: "on-failure:3"
+        command: "elasticsearch -Etransport.host=0.0.0.0 -Ediscovery.zen.minimum_master_nodes=1"
+        container_name: "elasticsearch-server"

@@ -36,8 +36,8 @@ services:
         depends_on:
             - "mysql-master-1"
         image: "mysql:5.7"
-#        ports:
-#            - "3201:3306"
+        ports:
+            - "3201:3306"
         volumes:
             - "/Users/allen/Docker/db/haproxy/mysql/mysql-slave-1:/var/lib/mysql"
             - "/Users/allen/Docker/config/haproxy/mysql/mysql-slave-1:/etc/mysql/mysql.conf.d"

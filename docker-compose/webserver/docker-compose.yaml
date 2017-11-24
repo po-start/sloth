@@ -1,24 +1,24 @@
 version: '3.2'
 services:
-#    redisserver:
-#        image: "redis:3.2.8"
-#        ports:
-#            - "6379:6379"
-#        volumes:
-##            - type: volume
-##              source: /Users/allen/Docker/db/redis
-##              target: /data
-#            - "/Users/allen/Docker/db/redis:/data"
-#            - "/Users/allen/Docker/config/redis:/usr/local/etc/redis"
-#            - "/Users/allen/Docker/logs/redis:/var/log/redis/"
-#        command: "redis-server /usr/local/etc/redis/redis.conf"
-#        labels:
-#            name: "redis"
-#            role: "redis server"
-#        # nginx意外退出时自动重启
-#        restart: "always"
-#        # 容器名称
-#        container_name: "redis-server"
+    redisserver:
+        image: "redis:3.2.8"
+        ports:
+            - "6379:6379"
+        volumes:
+#            - type: volume
+#              source: /Users/allen/Docker/db/redis
+#              target: /data
+            - "/Users/allen/Docker/db/redis:/data"
+            - "/Users/allen/Docker/config/redis:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis:/var/log/redis/"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        labels:
+            name: "redis"
+            role: "redis server"
+        # nginx意外退出时自动重启
+        restart: "always"
+        # 容器名称
+        container_name: "redis-server"
 
 #    memcachedserver:
 #        image: "memcached:1.4.35"
@@ -54,23 +54,24 @@ services:
         environment:
             - "MYSQL_ROOT_PASSWORD=hello123"
         # mysql意外退出时自动重启
-        restart: "always"
+#        restart: "always"
         # 容器名称
         container_name: "mysql-server"
 
     phpwebserver:
         # 依赖mysql服务，意味着在启动php之前先启动mysql
         depends_on:
-#            - "redisserver"
+            - "redisserver"
             - "mysqlserver"
-        image: "thinkphp:0.2.1"
+        image: "thinkphp:0.2.3"
         links:
             - "mysqlserver:mysqlserver"
 #            - "mongodbserver:mongodbserver"
-#            - "redisserver:redisserver"
+            - "redisserver:redisserver"
 #            - "memcachedserver:memcachedserver"
         volumes:
             - "/Users/allen/webstore:/data/webstore"
+            - "/Users/allen/new-webstore:/data/new-webstore"
         ports:
             - "9000:9000"
         # php意外退出时自动重启
@@ -90,8 +91,10 @@ services:
             - "phpwebserver:phpwebserver"
         volumes:
             - "/Users/allen/Docker/config/nginx/conf.d:/etc/nginx/conf.d"
+            - "/Users/allen/Docker/config/nginx/nginx.conf:/etc/nginx/nginx.conf"
             - "/Users/allen/Docker/logs/nginx:/var/log/nginx"
             - "/Users/allen/webstore:/data/webstore"
+            - "/Users/allen/new-webstore:/data/new-webstore"
         # nginx意外退出时自动重启
         restart: "always"
 #        volumes_from:

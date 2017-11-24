@@ -4,7 +4,8 @@ services:
         image: "redis:3.2.8-trib"
         volumes:
             - "/Users/allen/Docker/script/redis-trib-cluster/redis-trib/entrypoint.sh:/entrypoint.sh"
-        tty: true
+#        privileged: true
+#        tty: true
         environment:
             - "NODE_SUM=1"
             - "REDIS_NODE=172.88.11.101:6379 172.88.11.102:6379 172.88.11.103:6379 172.88.11.104:6379 172.88.11.105:6379 172.88.11.106:6379"

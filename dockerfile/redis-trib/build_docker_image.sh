@@ -1,4 +1,4 @@
 #! /usr/bin/env bash
 
-docker build -t redis:3.2.8-trib .
+docker build --rm -t redis:4.0.2-trib .
 docker images

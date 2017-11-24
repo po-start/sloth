@@ -1,0 +1,78 @@
+version: '3.2'
+services:
+    mysql-cluster-mgm:
+        image: "mysql-mgm:0.1.1"
+        volumes:
+            - "${HOME}/Docker/config/mysql-cluster/manage/config.ini:/var/lib/mysql-cluster/config.ini"
+        ports:
+            - "1186:1186"
+        privileged: true
+        tty: true
+        restart: "on-failure:3"
+        networks:
+            mysql-cluster-network:
+                ipv4_address: "172.120.11.10"
+        container_name: "mysql-cluster-mgm"
+        command: "/usr/local/bin/ndb_mgmd --nodaemon --config-file=/var/lib/mysql-cluster/config.ini --config-dir=/var/lib/mysql-cluster/ --skip-config-cache"
+    mysql-cluster-db-node-1:
+        image: "mysql-node:0.1.1"
+        ports:
+            - "4466:3306"
+        volumes:
+            - "${HOME}/Docker/config/mysql-cluster/db-node/my-1.cnf:/etc/my.cnf"
+            - "${HOME}/Docker/db/mysql-cluster/db-node/1:/usr/local/mysql/data"
+        restart: "on-failure:3"
+        links:
+            - "mysql-cluster-mgm:mysql-cluster-mgm"
+        networks:
+            mysql-cluster-network:
+                ipv4_address: "172.120.11.21"
+        container_name: "mysql-cluster-db-node-1"
+        privileged: true
+        tty: true
+        command: "ndbd --nodaemon"
+    mysql-cluster-db-node-2:
+        image: "mysql-node:0.1.1"
+        ports:
+            - "4477:3306"
+        volumes:
+            - "${HOME}/Docker/config/mysql-cluster/db-node/my-2.cnf:/etc/my.cnf"
+            - "${HOME}/Docker/db/mysql-cluster/db-node/2:/usr/local/mysql/data"
+        restart: "on-failure:3"
+        links:
+            - "mysql-cluster-mgm:mysql-cluster-mgm"
+        networks:
+            mysql-cluster-network:
+                ipv4_address: "172.120.11.22"
+        container_name: "mysql-cluster-db-node-2"
+        privileged: true
+        tty: true
+        command: "ndbd --nodaemon"
+    mysql-cluster-sql-1:
+        image: "mysql-sql:0.1.1"
+        ports:
+            - "3366:3306"
+        volumes:
+            - "${HOME}/Docker/db/mysql-cluster/sql-node:/var/lib/mysql"
+            - "${HOME}/Docker/config/mysql-cluster/sql-node/my-1.cnf:/etc/mysql/mysql.conf.d/my-1.cnf"
+            - "${HOME}/Docker/logs/mysql-cluster/sql-node:/var/log/mysql"
+        environment:
+            - "MYSQL_ROOT_PASSWORD=hello123"
+        restart: "on-failure:3"
+        links:
+            - "mysql-cluster-mgm:mysql-cluster-mgm"
+        networks:
+            mysql-cluster-network:
+                ipv4_address: "172.120.11.31"
+        container_name: "mysql-cluster-sql-1"
+        privileged: true
+        tty: true
+#        command: "mysqld --defaults-file=/etc/mysql/mysql.conf.d/my-1.cnf"
+        command: "mysqld --initialize --defaults-file=/etc/mysql/mysql.conf.d/my-1.cnf"
+networks:
+    mysql-cluster-network:
+        driver: "bridge"
+        ipam:
+            driver: "default"
+            config:
+                - subnet: "172.120.11.0/24"
