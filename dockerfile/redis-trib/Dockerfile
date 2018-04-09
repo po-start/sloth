@@ -1,9 +1,9 @@
-FROM redis:3.2.8
+FROM redis:3.2.8 
 
 MAINTAINER liuxiangxi12@163.com
 
-#ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-3.2.8.tar.gz
-ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-4.0.2.tar.gz
+ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-3.2.8.tar.gz
+#ENV REDIS_DOWNLOAD_URL http://download.redis.io/releases/redis-4.0.2.tar.gz
 
 RUN apt update \
 	&& apt install -y ruby \

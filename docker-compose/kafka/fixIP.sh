@@ -1,0 +1,8 @@
+#! /usr/bin/env bash
+
+scriptPath=$(cd `dirname $0`; pwd)
+
+ip=`ifconfig | grep "inet " | grep -v 127.0.0.1 | awk 'NR==1' | awk -F ' ' '{print $2}'`
+echo $ip
+sed -i "" "s/^.*KAFKA_ADVERTISED_HOST_NAME.*$/            KAFKA_ADVERTISED_HOST_NAME: \"${ip}\"/g" ./docker-compose.yaml
+docker-compose kill && docker-compose rm -f && docker-compose up -d && docker ps

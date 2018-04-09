@@ -20,6 +20,26 @@ services:
         # 容器名称
         container_name: "redis-server"
 
+#    zookeeperserver:
+#        image: "wurstmeister/zookeeper"
+#        ports:
+#            - "2181:2181"
+#        container_name: "zookeeper-server"
+#
+#    kafkaserver:
+#        image: "wurstmeister/kafka"
+#        ports:
+#            - "9092:9092"
+#        links:
+#            - "zookeeperserver:zookeeperserver"
+#        environment:
+#            KAFKA_ADVERTISED_HOST_NAME: "192.168.123.172"
+#            KAFKA_CREATE_TOPICS: "test:1:1"
+#            KAFKA_ZOOKEEPER_CONNECT: "zookeeperserver:2181"
+#        volumes:
+#            - "/tmp/docker.sock:/var/run/docker.sock" 
+#        container_name: "kafka-server"
+
 #    memcachedserver:
 #        image: "memcached:1.4.35"
 #        ports:
@@ -62,18 +82,22 @@ services:
         # 依赖mysql服务，意味着在启动php之前先启动mysql
         depends_on:
             - "redisserver"
+#            - "zookeeperserver"
             - "mysqlserver"
+#            - "kafkaserver"
         image: "thinkphp:0.2.3"
         links:
             - "mysqlserver:mysqlserver"
 #            - "mongodbserver:mongodbserver"
             - "redisserver:redisserver"
 #            - "memcachedserver:memcachedserver"
+#            - "zookeeperserver:zookeeperserver"
+#            - "kafkaserver:kafkaserver"
         volumes:
             - "/Users/allen/webstore:/data/webstore"
             - "/Users/allen/new-webstore:/data/new-webstore"
-        ports:
-            - "9000:9000"
+#        ports:
+#            - "9000:9000"
         # php意外退出时自动重启
         restart: "always"
         # 容器名称

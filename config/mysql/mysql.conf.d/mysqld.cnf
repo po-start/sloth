@@ -30,7 +30,8 @@ datadir		= /var/lib/mysql
 symbolic-links=0
 ## Log config
 server-id				= 303
-#log_bin					= mysql-bin 
+log_bin					= mysql-bin 
+binlog_format			= row
 log_error				= /var/log/mysql/error.log 
 long_query_time			= 1
 slow_query_log			= ON
