@@ -1,17 +1,17 @@
 version: '3.2'
 services:
     redisserver:
-        image: "redis:3.2.8"
+        image: "redis:4.0.9"
         ports:
             - "6379:6379"
         volumes:
-#            - type: volume
-#              source: /Users/allen/Docker/db/redis
-#              target: /data
             - "/Users/allen/Docker/db/redis:/data"
             - "/Users/allen/Docker/config/redis:/usr/local/etc/redis"
             - "/Users/allen/Docker/logs/redis:/var/log/redis/"
         command: "redis-server /usr/local/etc/redis/redis.conf"
+        networks:
+            web-server-network:
+                ipv4_address: "172.89.12.103"
         labels:
             name: "redis"
             role: "redis server"
@@ -19,49 +19,6 @@ services:
         restart: "always"
         # 容器名称
         container_name: "redis-server"
-
-#    zookeeperserver:
-#        image: "wurstmeister/zookeeper"
-#        ports:
-#            - "2181:2181"
-#        container_name: "zookeeper-server"
-#
-#    kafkaserver:
-#        image: "wurstmeister/kafka"
-#        ports:
-#            - "9092:9092"
-#        links:
-#            - "zookeeperserver:zookeeperserver"
-#        environment:
-#            KAFKA_ADVERTISED_HOST_NAME: "192.168.123.172"
-#            KAFKA_CREATE_TOPICS: "test:1:1"
-#            KAFKA_ZOOKEEPER_CONNECT: "zookeeperserver:2181"
-#        volumes:
-#            - "/tmp/docker.sock:/var/run/docker.sock" 
-#        container_name: "kafka-server"
-
-#    memcachedserver:
-#        image: "memcached:1.4.35"
-#        ports:
-#            - "11211:11211"
-#        labels:
-#            name: "memcached"
-#            role: "memcached server"
-#        # memcached意外退出时自动重启
-#        restart: "always"
-#        # 容器名称
-#        container_name: "memcached-server"
-#
-#    mongodbserver:
-#        image: "mongo:3.4.2"
-#        ports:
-#            - "27017:27017"
-#        volumes:
-#            - "/Users/allen/Docker/db/mongodb:/data/db"
-#        # mongo 意外退出时自动重启
-#        restart: "always"
-#        # 容器名称
-#        container_name: "mongodb-server"
 
     mysqlserver:
         image: "mysql:5.7"
@@ -71,6 +28,9 @@ services:
             - "/Users/allen/Docker/db/mysql:/var/lib/mysql"
             - "/Users/allen/Docker/config/mysql/mysql.conf.d:/etc/mysql/mysql.conf.d"
             - "/Users/allen/Docker/logs/mysql:/var/log/mysql"
+        networks:
+            web-server-network:
+                ipv4_address: "172.89.12.102" 
         environment:
             - "MYSQL_ROOT_PASSWORD=hello123"
         # mysql意外退出时自动重启
@@ -79,49 +39,53 @@ services:
         container_name: "mysql-server"
 
     phpwebserver:
-        # 依赖mysql服务，意味着在启动php之前先启动mysql
-        depends_on:
-            - "redisserver"
-#            - "zookeeperserver"
-            - "mysqlserver"
-#            - "kafkaserver"
-        image: "thinkphp:0.2.3"
-        links:
-            - "mysqlserver:mysqlserver"
-#            - "mongodbserver:mongodbserver"
-            - "redisserver:redisserver"
-#            - "memcachedserver:memcachedserver"
-#            - "zookeeperserver:zookeeperserver"
-#            - "kafkaserver:kafkaserver"
+        image: "laravel:0.1.4"
         volumes:
-            - "/Users/allen/webstore:/data/webstore"
-            - "/Users/allen/new-webstore:/data/new-webstore"
+            - "/Users/allen/PHP:/data/webstore"
+        networks:
+            web-server-network:
+                ipv4_address: "172.89.12.101" 
 #        ports:
 #            - "9000:9000"
         # php意外退出时自动重启
         restart: "always"
         # 容器名称
         container_name: "php-server"
+    vmcphp56:
+        image: "vmcshop:5.6.15-fpm"
+        volumes:
+            - "/Users/allen/PHP:/data/webstore"
+            - "/Users/allen/Docker/config/php/php.ini:/usr/local/etc/php/php.ini"
+        networks:
+            web-server-network:
+                ipv4_address: "172.89.12.107"
+        restart: "always"
+        container_name: "vmc-php-server"
 
     nginxwebserver:
         # 依赖php服务，意味着在启动nginx之前先启动php
-        depends_on:
-            - "phpwebserver"
-        image: "nginx:1.11"
+        image: "nginx:1.15.0"
         ports:
             - "80:80"
             - "443:443"
-        links:
-            - "phpwebserver:phpwebserver"
         volumes:
             - "/Users/allen/Docker/config/nginx/conf.d:/etc/nginx/conf.d"
-            - "/Users/allen/Docker/config/nginx/nginx.conf:/etc/nginx/nginx.conf"
+#            - "/Users/allen/Docker/config/nginx/nginx.conf:/etc/nginx/nginx.conf"
             - "/Users/allen/Docker/logs/nginx:/var/log/nginx"
-            - "/Users/allen/webstore:/data/webstore"
-            - "/Users/allen/new-webstore:/data/new-webstore"
+            - "/Users/allen/PHP:/data/webstore"
+        networks:
+            web-server-network:
+                ipv4_address: "172.89.12.100"
         # nginx意外退出时自动重启
         restart: "always"
 #        volumes_from:
 #            - phpwebserver
         # 容器名称
         container_name: "nginx-server"
+networks:
+    web-server-network:
+        driver: "bridge"
+        ipam:
+            driver: "default"
+            config:
+                - subnet: "172.89.12.0/24" 
