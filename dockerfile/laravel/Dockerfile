@@ -1,4 +1,4 @@
-FROM php:7.1.2-fpm  
+FROM php:7.3.4-fpm  
 
 MAINTAINER liuxiangxi12@163.com
 
@@ -7,6 +7,7 @@ RUN apt-get update \
     && apt-get install -y libssl-dev unzip \
     && docker-php-ext-install mysqli \
     && docker-php-ext-install pdo_mysql \
+    && docker-php-ext-install bcmath \
     && pecl install mongodb \
 	&& docker-php-ext-enable mongodb
 
@@ -31,7 +32,7 @@ RUN mkdir -p /tmp/protoc \
     && rm -r /tmp/protoc \
 	&& docker-php-ext-enable grpc
 
-RUN apt-get install -y libpng12-dev libjpeg-dev libfreetype6-dev libjpeg62-turbo-dev \
+RUN apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev libjpeg62-turbo-dev \
 	&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd
 

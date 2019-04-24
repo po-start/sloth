@@ -5,7 +5,7 @@ MAINTAINER liuxiangxi12@163.com
 ADD sources.list /etc/apt/
 
 RUN apt-get update \
-	&& apt-get install -y wget libssl-dev unzip \
+	&& apt-get install -y wget libssl-dev unzip libmcrypt-dev \
     && docker-php-ext-install mysqli \
     && docker-php-ext-install pdo_mysql \
     && pecl install mongodb \
@@ -16,7 +16,8 @@ RUN apt-get install -y uuid-dev \
 	&& docker-php-ext-enable uuid
 
 RUN docker-php-ext-install mbstring \
-	&& docker-php-ext-install bcmath
+	&& docker-php-ext-install bcmath \
+	&& docker-php-ext-install mcrypt 
 
 RUN apt-get install -y libmemcached-dev zlib1g-dev \
 	&& pecl install memcached-2.1.0	\
