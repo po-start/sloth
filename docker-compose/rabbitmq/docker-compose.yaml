@@ -1,0 +1,26 @@
+version: '3.2'
+services:
+    rebbitmqserver:
+        image: "rabbitmq:3.7.14"
+        ports:
+            - "4369:4369"
+            - "5671:5671"
+            - "5672:5672"
+            - "25672:25672"
+        restart: "on-failure:3"
+        volumes:
+            - "/Users/allen/Docker/db/rabbitmq:/var/lib/rabbitmq"
+        environment:
+            - "RABBITMQ_ERLANG_COOKIE='c331ae3512cd04f98cf07b6ba78db4a3960bcc70'"
+            - "RABBITMQ_NODENAME=tpp"
+            - "RABBITMQ_DEFAULT_USER=admin"
+            - "RABBITMQ_DEFAULT_PASS=hello123"
+        networks:
+            haproxy-network:
+                ipv4_address: "172.89.12.110"
+        container_name: "rebbitmq-server"
+
+networks:
+    haproxy-network:
+        external:
+            name: "webserver_web-server-network" 
