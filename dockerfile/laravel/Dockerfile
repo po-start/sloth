@@ -4,10 +4,13 @@ MAINTAINER liuxiangxi12@163.com
 
 # laravel 0.1.2
 RUN apt-get update \
-    && apt-get install -y libssl-dev unzip \
+    && apt-get install -y libssl-dev unzip librabbitmq-dev \
     && docker-php-ext-install mysqli \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install bcmath \
+    && docker-php-ext-install sockets\
+    && pecl install amqp \
+	&& docker-php-ext-enable amqp \ 
     && pecl install mongodb \
 	&& docker-php-ext-enable mongodb
 

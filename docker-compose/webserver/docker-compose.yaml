@@ -39,7 +39,7 @@ services:
         container_name: "mysql-server"
 
     phpwebserver:
-        image: "laravel:0.1.4"
+        image: "laravel:0.1.6"
         volumes:
             - "/Users/allen/PHP:/data/webstore"
         networks:
