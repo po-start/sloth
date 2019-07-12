@@ -23,7 +23,7 @@ RUN apt-get install -y libmemcached-dev zlib1g-dev \
 	&& pecl install memcached-2.1.0	\
 	&& docker-php-ext-enable memcached
 
-RUN pecl install redis \
+RUN pecl install redis-4.0.2.tgz \
 	&& docker-php-ext-enable redis \
     && apt-get install -y libzip-dev \
     && pecl install zip \
