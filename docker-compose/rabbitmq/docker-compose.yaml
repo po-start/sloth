@@ -17,7 +17,7 @@ services:
         networks:
             haproxy-network:
                 ipv4_address: "172.89.12.110"
-        container_name: "rebbitmq-server"
+        container_name: "rabbitmq-server"
 
 networks:
     haproxy-network:

@@ -20,26 +20,26 @@ services:
         # 容器名称
         container_name: "redis-server"
 
-    mysqlserver:
-        image: "mysql:5.7"
-        ports:
-            - "3306:3306"
-        volumes:
-            - "/Users/allen/Docker/db/mysql:/var/lib/mysql"
-            - "/Users/allen/Docker/config/mysql/mysql.conf.d:/etc/mysql/mysql.conf.d"
-            - "/Users/allen/Docker/logs/mysql:/var/log/mysql"
-        networks:
-            web-server-network:
-                ipv4_address: "172.89.12.102" 
-        environment:
-            - "MYSQL_ROOT_PASSWORD=hello123"
+#    mysqlserver:
+#        image: "mysql:5.7"
+#        ports:
+#            - "3306:3306"
+#        volumes:
+#            - "/Users/allen/Docker/db/mysql:/var/lib/mysql"
+#            - "/Users/allen/Docker/config/mysql/mysql.conf.d:/etc/mysql/mysql.conf.d"
+#            - "/Users/allen/Docker/logs/mysql:/var/log/mysql"
+#        networks:
+#            web-server-network:
+#                ipv4_address: "172.89.12.102" 
+#        environment:
+#            - "MYSQL_ROOT_PASSWORD=hello123"
         # mysql意外退出时自动重启
 #        restart: "always"
         # 容器名称
-        container_name: "mysql-server"
+#        container_name: "mysql-server"
 
     phpwebserver:
-        image: "laravel:0.1.6"
+        image: "laravel:0.1.7"
         volumes:
             - "/Users/allen/PHP:/data/webstore"
         networks:

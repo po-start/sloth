@@ -1,0 +1,22 @@
+version: '3.2'
+services:
+    mysqlserver:
+        image: "mysql:5.7"
+        ports:
+            - "3306:3306"
+        restart: "on-failure:3"
+        volumes:
+            - "/Users/allen/Docker/db/mysql:/var/lib/mysql"
+            - "/Users/allen/Docker/config/mysql/mysql.conf.d:/etc/mysql/mysql.conf.d"
+            - "/Users/allen/Docker/logs/mysql:/var/log/mysql"
+        environment:
+            - "MYSQL_ROOT_PASSWORD=hello123"
+        networks:
+            haproxy-network:
+                ipv4_address: "172.89.12.102"
+        container_name: "mysql-server"
+
+networks:
+    haproxy-network:
+        external:
+            name: "webserver_web-server-network" 
