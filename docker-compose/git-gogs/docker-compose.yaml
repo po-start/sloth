@@ -1,0 +1,43 @@
+version: '3.2'
+services:
+    mysql-server:
+        image: "mysql:5.7"
+        ports:
+            - "3336:3306"
+        volumes:
+            - "/Users/allen/Docker/db/git-mysql:/var/lib/mysql"
+            - "/Users/allen/Docker/config/git-mysql:/etc/mysql/mysql.conf.d"
+            - "/Users/allen/Docker/logs/git-mysql:/var/log/mysql"
+        environment:
+            - "MYSQL_ROOT_PASSWORD=hello123"
+        # mysql意外退出时自动重启
+#        restart: "always"
+        # 容器名称
+        networks:
+            git-gogs-network:
+                ipv4_address: "172.22.22.100"
+        container_name: "git-mysql-server"
+    git-gogs:
+        # 依赖php服务，意味着在启动nginx之前先启动php
+        depends_on:
+            - "mysql-server"
+        image: "gogs/gogs:0.11.53"
+        ports:
+            - "222:22"
+            - "3000:3000"
+        volumes:
+            - "/Users/allen/Git/gogs:/data"
+        # nginx意外退出时自动重启
+        restart: "always"
+        networks:
+            git-gogs-network:
+                ipv4_address: "172.22.22.101"
+        # 容器名称
+        container_name: "git-gogs"
+networks:
+    git-gogs-network:
+        driver: "bridge"
+        ipam:
+            driver: "default"
+            config:
+                - subnet: "172.22.22.0/24"

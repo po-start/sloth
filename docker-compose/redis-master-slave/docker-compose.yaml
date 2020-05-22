@@ -1,0 +1,39 @@
+version: '3.2'
+services:
+    redis-master:
+        image: "redis:3.2.8"
+        ports:
+            - "7000:6379"
+        volumes:
+            - "/Users/allen/Docker/db/redis-master-slave/redis-master:/data"
+            - "/Users/allen/Docker/config/redis-master-slave/redis-master:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-master-slave/redis-master:/var/log/redis/"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        restart: "always"
+        networks:
+            redis-network:
+                ipv4_address: "172.8.12.10"
+        container_name: "redis-master-slave-master"
+    redis-slave:
+        image: "redis:3.2.8"
+        ports:
+            - "7001:6379"
+        volumes:
+            - "/Users/allen/Docker/db/redis-master-slave/redis-slave:/data"
+            - "/Users/allen/Docker/config/redis-master-slave/redis-slave:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis-master-slave/redis-slave:/var/log/redis/"
+        links:
+            - "redis-master:redis-master"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        restart: "always"
+        networks:
+            redis-network:
+                ipv4_address: "172.8.12.11"
+        container_name: "redis-master-slave-slave"
+networks:
+    redis-network:
+        driver: "bridge"
+        ipam:
+            driver: "default"
+            config:
+                - subnet: "172.8.12.0/24"

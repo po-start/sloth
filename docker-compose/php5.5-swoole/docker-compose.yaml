@@ -1,0 +1,21 @@
+version: '3.2'
+services:
+    php5swooleserver:
+        image: "php-swoole:5.5-cli"
+        ports:
+            - "9997:9997"
+            - "10002:10002"
+        restart: "on-failure:3"
+        volumes:
+            - "/Users/allen/PHP:/data/webstore"
+            - "./entrypoint.sh:/usr/bin/entrypoint.sh"
+        networks:
+            haproxy-network:
+                ipv4_address: "172.89.12.121"
+        command: "/bin/bash -c /usr/bin/entrypoint.sh"
+        container_name: "php5.5-swoole-server"
+
+networks:
+    haproxy-network:
+        external:
+            name: "webserver_web-server-network" 

@@ -1,0 +1,126 @@
+version: '3.2'
+services:
+    mysql-master-1:
+        image: "mysql:5.7"
+#        ports:
+#            - "3100:3306"
+        volumes:
+            - "/Users/allen/Docker/db/haproxy/mysql/mysql-master-1:/var/lib/mysql"
+            - "/Users/allen/Docker/config/haproxy/mysql/mysql-master-1:/etc/mysql/mysql.conf.d"
+            - "/Users/allen/Docker/logs/haproxy/mysql/mysql-master-1:/var/log/mysql"
+        environment:
+            - "MYSQL_ROOT_PASSWORD=hello123"
+        restart: "on-failure:3"
+        networks:
+            mysql-haproxy-network:
+                ipv4_address: "172.32.6.10"
+        container_name: "haproxy-mysql-master-1"
+    mysql-backup:
+        depends_on:
+            - "mysql-master-1"
+        image: "mysql:5.7"
+#        ports:
+#            - "3101:3306"
+        volumes:
+            - "/Users/allen/Docker/db/haproxy/mysql/mysql-backup:/var/lib/mysql"
+            - "/Users/allen/Docker/config/haproxy/mysql/mysql-backup:/etc/mysql/mysql.conf.d"
+            - "/Users/allen/Docker/logs/haproxy/mysql/mysql-backup:/var/log/mysql"
+        environment:
+            - "MYSQL_ROOT_PASSWORD=hello123"
+        restart: "on-failure:3"
+        networks:
+            mysql-haproxy-network:
+                ipv4_address: "172.32.6.11"
+        container_name: "haproxy-mysql-backup"
+    mysql-slave-1:
+        depends_on:
+            - "mysql-master-1"
+        image: "mysql:5.7"
+        ports:
+            - "3201:3306"
+        volumes:
+            - "/Users/allen/Docker/db/haproxy/mysql/mysql-slave-1:/var/lib/mysql"
+            - "/Users/allen/Docker/config/haproxy/mysql/mysql-slave-1:/etc/mysql/mysql.conf.d"
+            - "/Users/allen/Docker/logs/haproxy/mysql/mysql-slave-1:/var/log/mysql"
+        environment:
+            - "MYSQL_ROOT_PASSWORD=hello123"
+        restart: "on-failure:3"
+        networks:
+            mysql-haproxy-network:
+                 ipv4_address: "172.32.6.101"
+        container_name: "haproxy-mysql-slave-1"
+    mysql-slave-2:
+        depends_on:
+            - "mysql-master-1"
+        image: "mysql:5.7"
+#        ports:
+#            - "3202:3306"
+        volumes:
+            - "/Users/allen/Docker/db/haproxy/mysql/mysql-slave-2:/var/lib/mysql"
+            - "/Users/allen/Docker/config/haproxy/mysql/mysql-slave-2:/etc/mysql/mysql.conf.d"
+            - "/Users/allen/Docker/logs/haproxy/mysql/mysql-slave-2:/var/log/mysql"
+        environment:
+            - "MYSQL_ROOT_PASSWORD=hello123"
+        restart: "on-failure:3"
+        networks:
+            mysql-haproxy-network:
+                 ipv4_address: "172.32.6.102"
+        container_name: "haproxy-mysql-slave-2"
+    mysql-slave-3:
+        depends_on:
+            - "mysql-master-1"
+        image: "mysql:5.7"
+#        ports:
+#            - "3203:3306"
+        volumes:
+            - "/Users/allen/Docker/db/haproxy/mysql/mysql-slave-3:/var/lib/mysql"
+            - "/Users/allen/Docker/config/haproxy/mysql/mysql-slave-3:/etc/mysql/mysql.conf.d"
+            - "/Users/allen/Docker/logs/haproxy/mysql/mysql-slave-3:/var/log/mysql"
+        environment:
+            - "MYSQL_ROOT_PASSWORD=hello123"
+        restart: "on-failure:3"
+        networks:
+            mysql-haproxy-network:
+                 ipv4_address: "172.32.6.103"
+        container_name: "haproxy-mysql-slave-3"
+    mysql-slave-4:
+        depends_on:
+            - "mysql-master-1"
+        image: "mysql:5.7"
+#        ports:
+#            - "3204:3306"
+        volumes:
+            - "/Users/allen/Docker/db/haproxy/mysql/mysql-slave-4:/var/lib/mysql"
+            - "/Users/allen/Docker/config/haproxy/mysql/mysql-slave-4:/etc/mysql/mysql.conf.d"
+            - "/Users/allen/Docker/logs/haproxy/mysql/mysql-slave-4:/var/log/mysql"
+        environment:
+            - "MYSQL_ROOT_PASSWORD=hello123"
+        restart: "on-failure:3"
+        networks:
+            mysql-haproxy-network:
+                 ipv4_address: "172.32.6.104"
+        container_name: "haproxy-mysql-slave-4"
+    mysql-slave-5:
+        depends_on:
+            - "mysql-master-1"
+        image: "mysql:5.7"
+#        ports:
+#            - "3205:3306"
+        volumes:
+            - "/Users/allen/Docker/db/haproxy/mysql/mysql-slave-5:/var/lib/mysql"
+            - "/Users/allen/Docker/config/haproxy/mysql/mysql-slave-5:/etc/mysql/mysql.conf.d"
+            - "/Users/allen/Docker/logs/haproxy/mysql/mysql-slave-5:/var/log/mysql"
+        environment:
+            - "MYSQL_ROOT_PASSWORD=hello123"
+        restart: "on-failure:3"
+        networks:
+            mysql-haproxy-network:
+                 ipv4_address: "172.32.6.105"
+        container_name: "haproxy-mysql-slave-5"
+networks:
+    mysql-haproxy-network:
+        driver: "bridge"
+        ipam:
+            driver: "default"
+            config:
+                - subnet: "172.32.6.0/24"

@@ -1,0 +1,25 @@
+version: '3.2'
+services:
+    haproxy-redis-server:
+        image: "haproxy:1.7.8-rsyslog"
+        ports:
+            - "7100:7100"
+            - "7200:7200"
+            - "8899:8899"
+        volumes:
+            - "/Users/allen/Docker/config/haproxy/conf-master/redis:/usr/local/etc/haproxy"
+            - "/Users/allen/Docker/db/haproxy/haproxy-master/redis:/usr/local/haproxy"
+            - "/Users/allen/Docker/logs/haproxy/haproxy-master/redis:/var/log/haproxy"
+            - "/Users/allen/Docker/script/haproxy-rsyslog:/script"
+        restart: "always"
+        # command: "haproxy -f /usr/local/etc/haproxy/haproxy.cfg"
+        ## Docker本身只能启动一个服务, 所以启动多服务,需要在启动后以脚本的方式启动多服务或使用Supervisor
+        command: "/bin/bash -c /script/entrypoint.sh"
+        networks:
+            haproxy-network:
+                ipv4_address: "172.10.6.2"
+        container_name: "haproxy-redis-server"
+networks:
+    haproxy-network:
+        external:
+            name: "redisserver_redis-haproxy-network"

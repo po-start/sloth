@@ -1,0 +1,22 @@
+version: '3.2'
+services:
+    postgresqlserver:
+        image: "postgres:11.5"
+        ports:
+            - "5432:5432"
+        restart: "on-failure:3"
+        volumes:
+            - "/Users/allen/Docker/db/postgresql:/var/lib/postgresql/data"
+            - "/Users/allen/Docker/config/postgresql:/etc/postgresql"
+        environment:
+            - "POSTGRES_USER=root"
+            - "POSTGRES_PASSWORD=hello123"
+        networks:
+            haproxy-network:
+                ipv4_address: "172.89.12.111"
+        container_name: "postgresql-server"
+
+networks:
+    haproxy-network:
+        external:
+            name: "webserver_web-server-network" 

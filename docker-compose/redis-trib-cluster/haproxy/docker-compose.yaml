@@ -1,0 +1,24 @@
+version: '3.2'
+services:
+    redis-trib:
+        image: "haproxy:1.7.8-rsyslog"
+        ports:
+            - "6380:6380"
+            - "8081:8888"
+        volumes:
+            - "${HOME}/Docker/config/redis-trib-cluster/haproxy:/usr/local/etc/haproxy"
+            - "${HOME}/Docker/db/redis-trib-cluster/haproxy:/usr/local/haproxy"
+            - "${HOME}/Docker/logs/redis-trib-cluster/haproxy:/var/log/haproxy"
+            - "${HOME}/Docker/script/haproxy-rsyslog:/script"
+#        privileged: true
+        tty: true
+        restart: "on-failure:3"
+        command: "/bin/bash -c /script/entrypoint.sh"
+        networks:
+            redis-trib-cluster-network:
+                ipv4_address: "172.88.11.2"
+        container_name: "redis-cluster-haproxy"
+networks:
+    redis-trib-cluster-network:
+        external:
+            name: "redisserver_redis-trib-cluster-network"

@@ -1,0 +1,91 @@
+version: '3.2'
+services:
+    redisserver:
+        image: "redis:4.0.9"
+        ports:
+            - "6379:6379"
+        volumes:
+            - "/Users/allen/Docker/db/redis:/data"
+            - "/Users/allen/Docker/config/redis:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/redis:/var/log/redis/"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        networks:
+            web-server-network:
+                ipv4_address: "172.89.12.103"
+        labels:
+            name: "redis"
+            role: "redis server"
+        # nginx意外退出时自动重启
+        restart: "always"
+        # 容器名称
+        container_name: "redis-server"
+
+#    mysqlserver:
+#        image: "mysql:5.7"
+#        ports:
+#            - "3306:3306"
+#        volumes:
+#            - "/Users/allen/Docker/db/mysql:/var/lib/mysql"
+#            - "/Users/allen/Docker/config/mysql/mysql.conf.d:/etc/mysql/mysql.conf.d"
+#            - "/Users/allen/Docker/logs/mysql:/var/log/mysql"
+#        networks:
+#            web-server-network:
+#                ipv4_address: "172.89.12.102" 
+#        environment:
+#            - "MYSQL_ROOT_PASSWORD=hello123"
+        # mysql意外退出时自动重启
+#        restart: "always"
+        # 容器名称
+#        container_name: "mysql-server"
+
+    phpwebserver:
+        image: "laravel:0.1.7"
+        volumes:
+            - "/Users/allen/PHP:/data/webstore"
+        networks:
+            web-server-network:
+                ipv4_address: "172.89.12.101" 
+#        ports:
+#            - "9000:9000"
+        # php意外退出时自动重启
+        restart: "always"
+        # 容器名称
+        container_name: "php-server"
+    vmcphp56:
+        image: "vmcshop:5.6.15-fpm"
+        volumes:
+            - "/Users/allen/PHP:/data/webstore"
+            - "/Users/allen/Docker/config/php/php.ini:/usr/local/etc/php/php.ini"
+        networks:
+            web-server-network:
+                ipv4_address: "172.89.12.107"
+        restart: "always"
+        container_name: "vmc-php-server"
+
+    nginxwebserver:
+        # 依赖php服务，意味着在启动nginx之前先启动php
+        image: "nginx:1.15.0"
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - "/Users/allen/Docker/config/nginx/conf.d:/etc/nginx/conf.d"
+#            - "/Users/allen/Docker/config/nginx/nginx.conf:/etc/nginx/nginx.conf"
+            - "/Users/allen/Docker/logs/nginx:/var/log/nginx"
+            - "/Users/allen/PHP:/data/webstore"
+        networks:
+            web-server-network:
+                ipv4_address: "172.89.12.100"
+        # nginx意外退出时自动重启
+        restart: "always"
+#        volumes_from:
+#            - phpwebserver
+        # 容器名称
+        container_name: "nginx-server"
+networks:
+    web-server-network:
+        driver: "bridge"
+        ipam:
+            driver: "default"
+            config:
+                - subnet: "172.89.12.0/24" 

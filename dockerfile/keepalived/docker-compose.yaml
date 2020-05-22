@@ -1,0 +1,25 @@
+version: '3.2'
+services:
+    keepalived-server:
+        image: "keepalived:1.2.13"
+#        ports:
+#            - "8888:8888"
+        volumes:
+            - "/Users/allen/Docker/config/keepalived:/etc/keepalived"
+#        restart: "always"
+        command: "/bin/bash -c /usr/bin/entrypoint.sh"
+        environment:
+            - "VIRTUAL_IP=1.1.1.1"
+            - "VIRTUAL_MASK=24"
+            - "CHECK_IP=172.32.6.2"
+            - "CHECK_PORT=8888"
+            - "VRID=22"
+            - "INTERFACE=eth0"
+        networks:
+            haproxy-network:
+                ipv4_address: "172.32.6.99"
+        container_name: "kepalived-server"
+networks:
+    haproxy-network:
+        external:
+            name: "mysqlserver_mysql-haproxy-network"

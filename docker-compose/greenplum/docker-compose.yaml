@@ -1,0 +1,27 @@
+version: '3.2'
+services:
+    gpmaster:
+        image: "centos7:0.1.1"
+        ports:
+            - "2345:2345"
+        volumes:
+            - "/Users/allen/Docker/logs/redis:/var/log/redis/"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        networks:
+            web-server-network:
+                ipv4_address: "172.89.12.103"
+        labels:
+            name: "redis"
+            role: "redis server"
+        # nginx意外退出时自动重启
+        restart: "always"
+        # 容器名称
+        container_name: "redis-server"
+
+networks:
+    web-server-network:
+        driver: "bridge"
+        ipam:
+            driver: "default"
+            config:
+                - subnet: "172.89.12.0/24" 

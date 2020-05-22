@@ -1,0 +1,6 @@
+[mysqld]
+ndbcluster
+ndb-connectstring="172.120.11.10:1186"       # IP address for server management node
+#default_storage_engine=ndbcluster     # Define default Storage Engine used by MySQL
+[mysql_cluster]
+ndb-connectstring="172.120.11.10:1186"       # IP address for server management node

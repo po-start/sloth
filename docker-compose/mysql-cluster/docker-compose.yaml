@@ -1,0 +1,51 @@
+version: '3.2'
+services:
+    mysql-cluster-mgm:
+        image: "debian:jessie"
+        volumes:
+            - "/Users/allen/Docker/dockerfile/mysql-cluster-new/bin/mysql-cluster-gpl-7.5.7-linux-glibc2.12-x86_64.tar.gz:/mysql-cluster-gpl-7.5.7-linux-glibc2.12-x86_64.tar.gz"
+        privileged: true
+        tty: true
+        restart: "on-failure:3"
+        ports:
+            - "1186:1186"
+        networks:
+            mysql-cluster-network:
+                ipv4_address: "172.120.11.10"
+        container_name: "mysql-cluster-mgm"
+        command: "/usr/bin/env bash"
+    mysql-cluster-db-node-1:
+        image: "debian:jessie"
+        volumes:
+            - "/Users/allen/Docker/dockerfile/mysql-cluster-new/bin/mysql-cluster-gpl-7.5.7-linux-glibc2.12-x86_64.tar.gz:/mysql-cluster-gpl-7.5.7-linux-glibc2.12-x86_64.tar.gz"
+        privileged: true
+        tty: true
+        restart: "on-failure:3"
+        ports:
+            - "1187:3306"
+        networks:
+            mysql-cluster-network:
+                ipv4_address: "172.120.11.21"
+        container_name: "mysql-cluster-db-node-1"
+        command: "/usr/bin/env bash"
+    mysql-cluster-db-node-2:
+        image: "debian:jessie"
+        volumes:
+            - "/Users/allen/Docker/dockerfile/mysql-cluster-new/bin/mysql-cluster-gpl-7.5.7-linux-glibc2.12-x86_64.tar.gz:/mysql-cluster-gpl-7.5.7-linux-glibc2.12-x86_64.tar.gz"
+        privileged: true
+        tty: true
+        restart: "on-failure:3"
+        ports:
+            - "1188:3306"
+        networks:
+            mysql-cluster-network:
+                ipv4_address: "172.120.11.22"
+        container_name: "mysql-cluster-db-node-2"
+        command: "/usr/bin/env bash"
+networks:
+    mysql-cluster-network:
+        driver: "bridge"
+        ipam:
+            driver: "default"
+            config:
+                - subnet: "172.120.11.0/24"

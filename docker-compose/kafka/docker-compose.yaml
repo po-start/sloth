@@ -1,0 +1,33 @@
+version: '3.2'
+services:
+    zookeeperserver:
+        image: "wurstmeister/zookeeper"
+        ports:  
+            - "2181:2181"
+        networks:
+            kafka-network:
+                ipv4_address: "172.22.23.100"
+        container_name: "zookeeper-server"
+
+    kafkaserver:
+        image: "wurstmeister/kafka"
+        ports:  
+            - "9092:9092"
+        networks:
+            kafka-network:
+                ipv4_address: "172.22.23.101"
+        environment:
+            KAFKA_ADVERTISED_HOST_NAME: "172.24.124.103"
+            KAFKA_CREATE_TOPICS: "249f7e7f13ca45f7609f165abd069c83cbb9705c:10:1,61b80f94cdd6d632f7bc38fd9ed91d9c:10:1"
+            KAFKA_ZOOKEEPER_CONNECT: "172.22.23.100:2181"
+        volumes:
+            - "/tmp/docker.sock:/var/run/docker.sock"
+            - "/data/db/kafka:/kafka"
+        container_name: "kafka-server"
+networks:
+    kafka-network:
+        driver: "bridge"
+        ipam:   
+            driver: "default"
+            config: 
+                - subnet: "172.22.23.0/24"

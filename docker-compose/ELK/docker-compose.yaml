@@ -1,0 +1,37 @@
+version: "3.2"
+services:
+    elasticsearch:
+        image: "elasticsearch:5.5.2" 
+        ports:
+            - "9200:9200"
+            - "9300:9300"
+        volumes:
+            - "/Users/allen/Docker/config/ELK/elasticsearch:/usr/share/elasticsearch/config"
+            - "/Users/allen/Docker/db/ELK/elasticsearch:/usr/share/elasticsearch/data"
+            - "/Users/allen/Docker/logs/ELK/elasticsearch:/usr/share/elasticsearch/logs"
+        environment:
+            - "http.host=0.0.0.0"
+            - "transport.host=127.0.0.1"
+        restart: "on-failure:3"
+        container_name: "elasticsearch-server"
+    redis:
+        image: "redis:3.2.8"
+        ports:
+            - "6379:6379"
+        volumes:
+            - "/Users/allen/Docker/db/ELK/redis:/data"
+            - "/Users/allen/Docker/config/ELK/redis:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/ELK/redis:/var/log/redis/"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        container_name: "redis-server"
+    logstash:
+        image: "logstash:5.5.2"
+        volumes:
+            - "/Users/allen/Docker/config/ELK/logstash:/config-dir"
+		command: "logstash -f /config-dir/logstash.conf"
+        container_name: "logstash-server"
+    kibana:
+        image: "kibana:5.4.0"
+        ports:
+            - "5601:5601"
+        container_name: "kibana-server"
