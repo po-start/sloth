@@ -1,0 +1,48 @@
+# emqx will occupy these port:
+# - 1883 port for MQTT
+# - 8080 for mgmt API
+# - 8083 for WebSocket/HTTP
+# - 8084 for WSS/HTTPS
+# - 8883 port for MQTT(SSL)
+# - 11883 port for internal MQTT/TCP
+# - 18083 for dashboard
+# - 4369 for port mapping
+# - 5369 for gen_rpc port mapping
+# - 6369 for distributed node
+
+version: '3.2'
+services:
+    mqtt-broker:
+        image: "emqx/emqx:v4.0.2"
+        ports:
+            - "18083:18083"
+            - "1883:1883"
+            - "8083:8083"
+        volumes:
+            - "/Users/allen/Docker/db/emqx/etc:/opt/emqxi/etc"
+            - "/Users/allen/Docker/logs/emqx/log:/opt/emqx/log"
+        environment:
+            - "EMQX_NAME=emqx"
+            - "EMQX_LISTENER__TCP__EXTERNAL=1883"
+#            - "EMQX_LOADED_PLUGINS=emqx_auth_redis,emqx_recon,emqx_retainer,emqx_management,emqx_dashboard"
+#            - "EMQX_AUTH__REDIS__SERVER=your.redis.server:6379"
+#            - "EMQX_AUTH__REDIS__PASSWORD=password_for_redis"
+#            - "EMQX_AUTH__REDIS__PASSWORD_HASH=plain"
+
+        networks:
+            mqtt-broker-network:
+                ipv4_address: "172.90.11.100"
+        labels:
+            name: "mqtt"
+            role: "mqtt broker"
+        restart: "always"
+        # 容器名称
+        container_name: "mqtt-broker"
+
+networks:
+    mqtt-broker-network:
+        driver: "bridge"
+        ipam:
+            driver: "default"
+            config:
+                - subnet: "172.90.11.0/24" 

@@ -1,0 +1,23 @@
+version: '3.2'
+services:
+    redis-youle:
+        image: "redis:4.0.9"
+        ports:
+            - "16379:6379"
+        volumes:
+            - "/Users/allen/Docker/db/swoole/redis:/data"
+            - "/Users/allen/Docker/config/swoole/redis:/usr/local/etc/redis"
+            - "/Users/allen/Docker/logs/swoole/redis:/var/log/redis/"
+        command: "redis-server /usr/local/etc/redis/redis.conf"
+        networks:
+            redis-youle-network:
+                ipv4_address: "172.88.88.103"
+        # nginx意外退出时自动重启
+#        restart: "always"
+        # 容器名称
+        container_name: "youle-redis-server"
+
+networks:
+    redis-youle-network:
+        external:
+            name: "nginx_nginx-youle-network"

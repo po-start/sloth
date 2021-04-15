@@ -1,0 +1,19 @@
+version: '3.2'
+services:
+    hyperf-server:
+        image: "hyperf/hyperf:7.4-alpine-v3.11-swoole-v4.5.6"
+        volumes:
+            - "/Users/allen/PHP/fight-the-landlord:/data/swoole"
+        networks:
+            hyperf-network:
+                ipv4_address: "172.89.12.136"
+        ports:
+            - "8199:8199"
+        restart: "on-failure:3"
+        command: "php -d swoole.use_shortname=Off /data/swoole/bin/hyperf.php start"
+        container_name: "hyperf-server"
+
+networks:
+    hyperf-network:
+        external:
+            name: "webserver_web-server-network"

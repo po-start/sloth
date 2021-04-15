@@ -1,0 +1,19 @@
+version: '3.2'
+services:
+    happy-three-landlord-youle:
+        image: "swoole:1.9.3"
+        volumes:
+            - "${HOME}/PHP/new_youle/game/HappyThree_landlord:/data/swoole"
+        networks:
+            happy-youle-network:
+                ipv4_address: "172.88.88.112"
+        ports:
+            - "9300:9300"
+#        restart: "always"
+        command: "php /data/swoole/server.php"
+        container_name: "youle-happy-three-landlord-server"
+
+networks:
+    happy-youle-network:
+        external:
+            name: "nginx_nginx-youle-network"

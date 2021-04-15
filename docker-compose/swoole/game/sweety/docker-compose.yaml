@@ -1,0 +1,19 @@
+version: '3.2'
+services:
+    sweety-youle:
+        image: "swoole:1.9.3"
+        volumes:
+            - "${HOME}/PHP/new_youle/game/sweety:/data/swoole"
+        networks:
+            sweety-youle-network:
+                ipv4_address: "172.88.88.110"
+        ports:
+            - "9000:9000"
+#        restart: "always"
+        command: "php /data/swoole/sweety9000.php"
+        container_name: "youle-sweety-server"
+
+networks:
+    sweety-youle-network:
+        external:
+            name: "nginx_nginx-youle-network"

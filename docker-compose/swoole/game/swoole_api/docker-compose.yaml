@@ -1,0 +1,22 @@
+version: '3.2'
+services:
+    swoole-api-youle:
+        image: "swoole:1.9.3"
+        volumes:
+            - "${HOME}/PHP/new_youle/game/swoole_api:/data/swoole"
+        networks:
+            api-youle-network:
+                ipv4_address: "172.88.88.115" 
+        ports:
+            - "8888:9000"
+        # php意外退出时自动重启
+        #restart: "always"
+        command: "php /data/swoole/server.php"
+        # 容器名称
+        container_name: "youle-swoole-api-server"
+
+networks:
+    api-youle-network:
+        external:
+            name: "nginx_nginx-youle-network" 
+

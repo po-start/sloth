@@ -1,0 +1,22 @@
+version: '3.2'
+services:
+    mssqlserver:
+        image: "mcr.microsoft.com/mssql/server:2017-latest"
+        ports:
+            - "1433:1433"
+        restart: "on-failure:3"
+        volumes:
+            - "/Users/allen/Docker/db/mssql:/var/opt/mssql"
+            - /var/opt/mssql/data
+        environment:
+            - "ACCEPT_EULA=Y"
+            - "SA_PASSWORD=Hello123"
+        networks:
+            mssql-network:
+                ipv4_address: "172.89.12.132"
+        container_name: "mssql-server"
+
+networks:
+    mssql-network:
+        external:
+            name: "webserver_web-server-network" 

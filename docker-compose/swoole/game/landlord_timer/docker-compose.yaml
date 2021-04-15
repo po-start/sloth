@@ -1,0 +1,19 @@
+version: '3.2'
+services:
+    landlord-timer-youle:
+        image: "swoole:1.9.3"
+        volumes:
+            - "${HOME}/PHP/new_youle/game/landlord_timer:/data/swoole"
+        networks:
+            landlord-timer-youle-network:
+                ipv4_address: "172.88.88.114"
+        ports:
+            - "9003:9003"
+#        restart: "always"
+        command: "php /data/swoole/server.php"
+        container_name: "youle-landlord-timer-server"
+
+networks:
+    landlord-timer-youle-network:
+        external:
+            name: "nginx_nginx-youle-network"

@@ -1,0 +1,24 @@
+version: '3.2'
+services:
+    kotioniotserver:
+        image: "openjdk:8-jre-alpine"
+        ports:
+            - "1087:1087"
+            - "1883:1883"
+        volumes:
+            - "/Users/allen/Kotlin/MQttGpsDO/jar:/data/jar"
+        command: "java -jar /data/jar/DoMqttServer-1.0-SNAPSHOT-all.jar -c /data/jar/config.json"
+        networks:
+            iot-network:
+                ipv4_address: "172.89.12.201"
+        labels:
+            name: "iot"
+            role: "mqtt and web server"
+        restart: "on-failure:3"
+        # 容器名称
+        container_name: "iot-mqtt-web-server"
+
+networks:
+    iot-network:
+        external:
+            name: "webserver_web-server-network"

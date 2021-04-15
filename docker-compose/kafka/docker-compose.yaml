@@ -1,33 +1,49 @@
 version: '3.2'
 services:
-    zookeeperserver:
-        image: "wurstmeister/zookeeper"
-        ports:  
-            - "2181:2181"
-        networks:
-            kafka-network:
-                ipv4_address: "172.22.23.100"
-        container_name: "zookeeper-server"
+  zookeeper-1:
+    image: "zookeeper:3.7.0"
+    ports:  
+      - 2181:2181
+    hostname: "zookeeper-1"
+    restart: "on-failure:3"
+    networks:
+      kafka-network:
+        ipv4_address: "172.34.27.101"
+    container_name: "zookeeper-1"
 
-    kafkaserver:
-        image: "wurstmeister/kafka"
-        ports:  
-            - "9092:9092"
-        networks:
-            kafka-network:
-                ipv4_address: "172.22.23.101"
-        environment:
-            KAFKA_ADVERTISED_HOST_NAME: "172.24.124.103"
-            KAFKA_CREATE_TOPICS: "249f7e7f13ca45f7609f165abd069c83cbb9705c:10:1,61b80f94cdd6d632f7bc38fd9ed91d9c:10:1"
-            KAFKA_ZOOKEEPER_CONNECT: "172.22.23.100:2181"
-        volumes:
-            - "/tmp/docker.sock:/var/run/docker.sock"
-            - "/data/db/kafka:/kafka"
-        container_name: "kafka-server"
+  kafka-1:
+    image: "wurstmeister/kafka:2.13-2.7.0"
+    ports:  
+      - 9092:9092
+    depends_on:
+     - "zookeeper-1"
+    hostname: "kafka-1"
+    restart: "on-failure:3"
+    networks:
+      kafka-network:
+        ipv4_address: "172.34.27.102"
+    environment:
+      - "TZ=CST-8"
+      - "KAFKA_ADVERTISED_HOST_NAME=192.168.1.10"
+      - "KAFKA_ADVERTISED_PORT=9092"
+      - "KAFKA_ZOOKEEPER_CONNECT=zookeeper-1:2181"
+      - "KAFKA_CREATE_TOPICS=test:10:1"
+      - "KAFKA_AUTO_CREATE_TOPICS_ENABLE=false"
+      # 非必须，设置对内存
+      - "KAFKA_HEAP_OPTS=-Xmx1G -Xms1G"
+      # 非必须，设置保存7天数据，为默认值
+      - "KAFKA_LOG_RETENTION_HOURS=168"
+      - "LOG4J_LOGGER_KAFKA_AUTHORIZER_LOGGER=DEBUG, authorizerAppender"
+    volumes:
+      - "${HOME}/Docker/run/kafka/kafka-1/docker.sock:/var/run/docker.sock"
+      - "${HOME}/Docker/db/kafka/kafka-1:/kafka"
+      - "${HOME}/Docker/config/kafka/kafka-1/config:/opt/kafka/config"
+    container_name: "kafka-1"
+
 networks:
-    kafka-network:
-        driver: "bridge"
-        ipam:   
-            driver: "default"
-            config: 
-                - subnet: "172.22.23.0/24"
+  kafka-network:
+    driver: "bridge"
+    ipam:   
+      driver: "default"
+      config: 
+        - subnet: "172.34.27.0/24"

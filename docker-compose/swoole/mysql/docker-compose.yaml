@@ -1,0 +1,23 @@
+version: '3.2'
+services:
+    mysql-youle:
+        image: "mysql:5.6"
+        ports:
+            - "13306:3306"
+        volumes:
+            - "/Users/allen/Docker/db/swoole/mysql:/var/lib/mysql"
+            - "/Users/allen/Docker/config/swoole/mysql/mysql.conf.d:/etc/mysql/mysql.conf.d"
+            - "/Users/allen/Docker/logs/swoole/mysql:/var/log/mysql"
+        networks:
+            mysql-youle-network:
+                ipv4_address: "172.88.88.102" 
+        environment:
+            - "MYSQL_ROOT_PASSWORD=hello123"
+#        restart: "always"
+        # 容器名称
+        container_name: "youle-mysql-server"
+
+networks:
+    mysql-youle-network:
+        external:
+            name: "nginx_nginx-youle-network"

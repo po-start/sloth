@@ -1,0 +1,30 @@
+version: '3.2'
+services:
+    app-rtc-server:
+        image: "piasy/apprtc-server:v1.6"
+        ports:
+            - "8080:8080"
+            - "8089:8089"
+            - "3478:3478"
+            - "3478:3478/udp"
+            - "3033:3033"
+        expose:
+            - "59000-65000"
+        restart: "on-failure:3"
+        volumes:
+            - "/Users/allen/Docker/config/apprtc:/apprtc_configs"
+        environment:
+            - "PUBLIC_IP=192.168.1.17"
+        networks:
+            app-rtc-server-network:
+                ipv4_address: "172.89.43.100"
+        container_name: "app-rtc-server"
+        command: "/bin/sh -c /run.sh"
+
+networks:
+    app-rtc-server-network:
+        driver: "bridge"
+        ipam:
+            driver: "default"
+            config:
+                - subnet: "172.89.43.0/24"

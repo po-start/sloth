@@ -1,4 +1,4 @@
 #! /usr/bin/env bash 
 
-docker build --rm -t laravel:0.2.8 .
+docker build --rm -t laravel:8.0.0 .
 docker images

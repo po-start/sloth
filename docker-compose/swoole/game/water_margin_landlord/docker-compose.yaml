@@ -1,0 +1,19 @@
+version: '3.2'
+services:
+    water-margin-landlord-youle:
+        image: "swoole:1.9.3"
+        volumes:
+            - "${HOME}/PHP/new_youle/game/WaterMargin_landlord:/data/swoole"
+        networks:
+            water-youle-network:
+                ipv4_address: "172.88.88.113"
+        ports:
+            - "9200:9200"
+#        restart: "always"
+        command: "php /data/swoole/server.php"
+        container_name: "youle-water-margin-landlord-server"
+
+networks:
+    water-youle-network:
+        external:
+            name: "nginx_nginx-youle-network"

@@ -1,0 +1,23 @@
+version: '3.2'
+services:
+    zentao:
+        image: "idoop/zentao:latest"
+        ports:
+            - "23306:3306"
+        volumes:
+            - "/Users/allen/Docker/db/zbox:/opt/zbox"
+        environment:
+            - "ADMINER_USER=admin"
+            - "ADMINER_PASSWD=hello123"
+            - "USER=root"
+            - "PASSWD=hello123"
+            - "BIND_ADDRESS=false"
+        restart: "on-failure:3"
+        networks:
+            haproxy-network:
+                ipv4_address: "172.89.12.188"
+        container_name: "zentao-server"
+networks:
+    haproxy-network:
+        external:
+            name: "webserver_web-server-network" 

@@ -1,0 +1,25 @@
+version: '3.2'
+services:
+    nginx-youle:
+        image: "nginx:1.15.0"
+        ports:
+            - "8080:80"
+        volumes:
+            - "${HOME}/Docker/config/swoole/nginx/conf.d:/etc/nginx/conf.d"
+            - "${HOME}/Docker/logs/swoole/nginx:/var/log/nginx"
+            - "${HOME}/PHP/new_youle/web:/data/webstore"
+        networks:
+            nginx-youle-network:
+                ipv4_address: "172.88.88.100"
+        #restart: "always"
+        # 容器名称
+        container_name: "youle-nginx-server"
+
+networks:
+    nginx-youle-network:
+        driver: "bridge"
+        ipam:
+            driver: "default"
+            config:
+                - subnet: "172.88.88.0/24" 
+

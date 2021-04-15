@@ -1,0 +1,23 @@
+version: '3.2'
+services:
+    goiotserver:
+        image: "golang:1.13.5"
+        ports:
+            - "9999:9999"
+        volumes:
+            - "/Users/allen/Go/oc-IoT/src/github.com/ociot/compile/linux:/data/oc"
+        command: "/data/oc/iot-server -env /data/oc/.env -log /data/oc/logs"
+        networks:
+            go-iot-network:
+                ipv4_address: "172.89.12.208"
+        labels:
+            name: "iot"
+            role: "go oc web server"
+        restart: "on-failure:3"
+        # 容器名称
+        container_name: "go-oc-web-server"
+
+networks:
+    go-iot-network:
+        external:
+            name: "webserver_web-server-network"

@@ -1,0 +1,21 @@
+## https://github.com/strukturag/spreed-webrtc
+version: '3.2'
+services:
+    web-rtc-server:
+        image: "spreed/webrtc:0.28.1"
+        ports:
+            - "8080:8080"
+            - "8443:8443"
+        restart: "on-failure:3"
+        volumes:
+            - "/Users/allen/CodeBackup/data/db/webrtc/srv:/srv"
+        networks:
+            web-rtc-server-network:
+                ipv4_address: "172.89.12.187"
+        container_name: "web-rtc-server"
+        #command: "/bin/sh -c /srv/entrypoint.sh"
+
+networks:
+    web-rtc-server-network:
+        external:
+            name: "webserver_web-server-network"

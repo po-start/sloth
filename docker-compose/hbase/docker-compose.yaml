@@ -1,0 +1,114 @@
+version: '3.2'
+services:
+  hbase-zookeeper:
+    image: "harisekhon/zookeeper:3.3"
+    ports:
+      - 2181:2181
+    hostname: "hbase-zookeeper"
+    restart: "on-failure:3"
+    volumes:
+#      - "${HOME}/Docker/db/hbase/hbase-zookeeper:/zookeeper/data"
+      - "${HOME}/Docker/logs/hbase/hbase-zookeeper:/zookeeper/logs"
+#      - "${HOME}/Docker/config/hbase/hbase-zookeeper:/zookeeper/conf"
+    networks:
+      hbase-network:
+        ipv4_address: "172.88.88.104"
+    container_name: "hbase-zookeeper"
+
+  hbase-master:
+    image: "harisekhon/hbase:2.1" 
+    command: master
+    ports:
+      - 16000:16000
+      - 16010:16010
+    depends_on:
+      - "hbase-zookeeper"
+#      - "hbase-regionserver"
+#      - "hbase-stargate"
+#      - "hbase-thrift"
+    links:
+      - "hbase-zookeeper"
+    hostname: "hbase-master"
+    restart: "on-failure:3"
+    volumes:
+      - "${HOME}/Docker/db/hbase/hbase-master:/hbase-data"
+      - "${HOME}/Docker/logs/hbase/hbase-master:/hbase/logs"
+      - "${HOME}/Docker/config/hbase/hbase-master:/hbase/conf"
+    networks:
+      hbase-network:
+        ipv4_address: "172.88.88.100"
+    container_name: "hbase-master"
+
+  hbase-regionserver:
+    image: "harisekhon/hbase:2.1"
+    command: regionserver
+    ports:
+      - 16030:16030
+      - 16201:16201
+      - 16301:16301
+    depends_on:
+      - "hbase-zookeeper"
+    links:
+      - "hbase-zookeeper"
+#      - "hbase-master"
+    hostname: "hbase-regionserver"
+    restart: "on-failure:3"
+    volumes:
+      - "${HOME}/Docker/db/hbase/hbase-regionserver:/hbase-data"
+      - "${HOME}/Docker/logs/hbase/hbase-regionserver:/hbase/logs"
+      - "${HOME}/Docker/config/hbase/hbase-regionserver:/hbase/conf"
+    networks:
+      hbase-network:
+        ipv4_address: "172.88.88.101"
+    container_name: "hbase-regionserver"
+      
+  hbase-thrift:
+    image: "harisekhon/hbase:2.1"
+    command: thrift
+    ports:
+      - 9090:9090
+      - 9095:9095
+    depends_on:
+      - "hbase-zookeeper"
+    links:
+      - "hbase-zookeeper"
+    hostname: "hbase-thrift"
+    restart: "on-failure:3"
+    volumes:
+      - "${HOME}/Docker/db/hbase/hbase-thrift:/hbase-data"
+      - "${HOME}/Docker/logs/hbase/hbase-thrift:/hbase/logs"
+      - "${HOME}/Docker/config/hbase/hbase-thrift:/hbase/conf"
+    networks:
+      hbase-network:
+        ipv4_address: "172.88.88.102"
+    container_name: "hbase-thrift"
+
+  hbase-stargate:
+    image: "harisekhon/hbase:2.1"
+    command: stargate
+    ports:
+      - 8080:8080
+      - 8085:8085
+    depends_on:
+      - "hbase-zookeeper"
+    links:
+      - "hbase-zookeeper"
+    hostname: "hbase-stargate"
+    restart: "on-failure:3"
+    volumes:
+      - "${HOME}/Docker/db/hbase/hbase-stargate:/hbase-data"
+      - "${HOME}/Docker/logs/hbase/hbase-stargate:/hbase/logs"
+      - "${HOME}/Docker/config/hbase/hbase-stargate:/hbase/conf"
+    networks:
+      hbase-network:
+        ipv4_address: "172.88.88.103"
+    container_name: "hbase-stargate"
+
+networks:
+  hbase-network:
+    driver: "bridge"
+    ipam:
+      driver: "default"
+      config:
+        - subnet: "172.88.88.0/24" 
+

@@ -1,0 +1,27 @@
+version: '3.2'
+services:
+  hbase-master:
+    image: "harisekhon/hbase:2.1"
+    ports:
+      - 2181:2181
+      - 8080:8080
+      - 8085:8085
+      - 9090:9090
+      - 9095:9095
+      - 16000:16000
+      - 16010:16010
+      - 16201:16201
+      - 16301:16301
+    restart: "on-failure:3"
+    volumes:
+      - "${HOME}/Docker/db/hbase/hbase-master-single:/hbase-data"
+      - "${HOME}/Docker/logs/hbase/hbase-master-single:/hbase/logs"
+    networks:
+      hbase-single-network:
+        ipv4_address: "172.88.88.88"
+    container_name: "hbase-master-single"
+
+networks:
+  hbase-single-network:
+    external:
+      name: "hbase_hbase-network"

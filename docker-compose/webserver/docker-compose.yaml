@@ -39,7 +39,7 @@ services:
 #        container_name: "mysql-server"
 
     phpwebserver:
-        image: "laravel:0.1.7"
+        image: "laravel:0.2.8"
         volumes:
             - "/Users/allen/PHP:/data/webstore"
         networks:
@@ -51,16 +51,21 @@ services:
         restart: "always"
         # 容器名称
         container_name: "php-server"
-    vmcphp56:
-        image: "vmcshop:5.6.15-fpm"
-        volumes:
-            - "/Users/allen/PHP:/data/webstore"
-            - "/Users/allen/Docker/config/php/php.ini:/usr/local/etc/php/php.ini"
-        networks:
-            web-server-network:
-                ipv4_address: "172.89.12.107"
-        restart: "always"
-        container_name: "vmc-php-server"
+#    vmcphp56:
+#        image: "vmcshop:5.6.15-fpm"
+#        volumes:
+#            - "/Users/allen/PHP:/data/webstore"
+#            - "/Users/allen/Docker/config/php/php.ini:/usr/local/etc/php/php.ini"
+#            - "/Users/allen/PHP/Cao/kod_web_bby/bby_database:/bby_database"
+#            - "/Users/allen/PHP/Cao/kod_web_bby/bby_userdata:/bby_userdata"
+#            - "/Users/allen/PHP/Cao/kod_web_bby/bby_userweb:/bby_userweb"
+#            - "/Users/allen/PHP/Cao/kod_web_bby/bby_web:/bby_web"
+#            - "/Users/allen/PHP/Cao/kod_web_bby/bby_web_share:/bby_web_share"
+#        networks:
+#            web-server-network:
+#                ipv4_address: "172.89.12.107"
+#        restart: "always"
+#        container_name: "vmc-php-server"
 
     nginxwebserver:
         # 依赖php服务，意味着在启动nginx之前先启动php

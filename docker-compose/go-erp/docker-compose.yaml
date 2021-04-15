@@ -1,0 +1,20 @@
+version: '3.2'
+services:
+    gogrpcserver:
+        image: "golang:1.13.5"
+        volumes:
+            - "/Users/allen/Go/build:/data/go"
+        networks:
+            haproxy-network:
+                ipv4_address: "172.89.12.199" 
+        command: "/bin/bash -c /data/go/erpGrpc/entrypoint.sh"
+        ports:
+            - "50001:50001"
+        # php意外退出时自动重启
+        restart: "always"
+        # 容器名称
+        container_name: "go-grpc-erp"
+networks:
+    haproxy-network:
+        external:
+            name: "webserver_web-server-network" 

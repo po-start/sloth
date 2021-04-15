@@ -1,0 +1,66 @@
+version: '3.2'
+services:
+  cassandra-1:
+    image: "cassandra:3.11.10" 
+    ports:
+      - 7101:7000
+      - 9101:9042
+    hostname: "cassandra-1"
+    restart: "on-failure:3"
+    environment:
+      - "CASSANDRA_BROADCAST_ADDRESS=cassandra-1"
+    volumes:
+      - "${HOME}/Docker/db/cassandra/cassandra-1:/var/lib/cassandra"
+      - "${HOME}/Docker/logs/cassandra/cassandra-1:/var/log/cassandra"
+      - "${HOME}/Docker/config/cassandra/cassandra-1/cassandra.yaml:/opt/cassandra/conf/cassandra.yaml"
+    networks:
+      cassandra-network:
+        ipv4_address: "172.88.89.101"
+    container_name: "cassandra-1"
+
+  cassandra-2:
+    image: "cassandra:3.11.10"
+    ports:
+      - 7102:7000
+      - 9102:9042 
+    hostname: "cassandra-2"
+    restart: "on-failure:3"
+    environment:
+      - "CASSANDRA_BROADCAST_ADDRESS=cassandra-2"
+      - "CASSANDRA_SEEDS=cassandra-1"
+    volumes:
+      - "${HOME}/Docker/db/cassandra/cassandra-2:/var/lib/cassandra"
+      - "${HOME}/Docker/logs/cassandra/cassandra-2:/var/log/cassandra"
+      - "${HOME}/Docker/config/cassandra/cassandra-2/cassandra.yaml:/opt/cassandra/conf/cassandra.yaml"
+    networks:
+      cassandra-network:
+        ipv4_address: "172.88.89.102"
+    container_name: "cassandra-2"
+
+  cassandra-3:
+    image: "cassandra:3.11.10"
+    ports:
+      - 7103:7000
+      - 9103:9042 
+    hostname: "cassandra-3"
+    restart: "on-failure:3"
+    environment:
+      - "CASSANDRA_BROADCAST_ADDRESS=cassandra-3"
+      - "CASSANDRA_SEEDS=cassandra-1"
+    volumes:
+      - "${HOME}/Docker/db/cassandra/cassandra-3:/var/lib/cassandra"
+      - "${HOME}/Docker/logs/cassandra/cassandra-3:/var/log/cassandra"
+      - "${HOME}/Docker/config/cassandra/cassandra-3/cassandra.yaml:/opt/cassandra/conf/cassandra.yaml"
+    networks:
+      cassandra-network:
+        ipv4_address: "172.88.89.103"
+    container_name: "cassandra-3"
+
+networks:
+  cassandra-network:
+    driver: "bridge"
+    ipam:
+      driver: "default"
+      config:
+        - subnet: "172.88.89.0/24" 
+

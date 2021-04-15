@@ -1,0 +1,20 @@
+version: '3.2'
+services:
+    php-youle:
+        image: "laravel:0.1.7"
+        volumes:
+            - "${HOME}/PHP/new_youle/web:/data/webstore"
+        networks:
+            php-youle-network:
+                ipv4_address: "172.88.88.200" 
+#        ports:
+#            - "9000:9000"
+        # php意外退出时自动重启
+#        restart: "always"
+        # 容器名称
+        container_name: "youle-php-fpm-server"
+
+networks:
+    php-youle-network:
+        external:
+            name: "nginx_nginx-youle-network"
